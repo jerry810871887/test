@@ -21,10 +21,13 @@ jobs:
           import os
           import urllib.request
 
-          url = os.environ["COZE_WORKFLOW_RUN_URL"]
-          token = os.environ["COZE_API_TOKEN"]
-          workflow_id = os.environ["COZE_WORKFLOW_ID"]
-          keywords = os.environ["KEYWORDS"]
+          url = os.environ["COZE_WORKFLOW_RUN_URL"].strip()
+          token = os.environ["COZE_API_TOKEN"].strip()
+          workflow_id = os.environ["COZE_WORKFLOW_ID"].strip()
+          keywords = os.environ["KEYWORDS"].strip()
+
+          print("workflow_id repr:", repr(workflow_id))
+          print("keywords repr:", repr(keywords))
 
           body = {
               "workflow_id": workflow_id,
