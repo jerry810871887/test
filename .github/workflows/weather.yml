@@ -11,8 +11,7 @@ jobs:
     steps:
       - name: Trigger Coze workflow
         run: |
-          response=$(curl --fail-with-body -sS -X POST "${{ secrets.COZE_WORKFLOW_RUN_URL }}" \
+          curl -sS -X POST "${{ secrets.COZE_WORKFLOW_RUN_URL }}" \
             -H "Authorization: Bearer ${{ secrets.COZE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"workflow_id\":\"${{ secrets.COZE_WORKFLOW_ID }}\",\"parameters\":{\"keywords\":\"${{ secrets.KEYWORDS }}\"}}")
-          echo "$response"
+            -d "{\"workflow_id\":\"${{ secrets.COZE_WORKFLOW_ID }}\",\"parameters\":{\"keywords\":\"${{ secrets.KEYWORDS }}\"}}"
