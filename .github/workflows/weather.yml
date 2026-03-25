@@ -14,4 +14,4 @@ jobs:
           curl -X POST "${{ secrets.COZE_WORKFLOW_RUN_URL }}" \
             -H "Authorization: Bearer ${{ secrets.COZE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"parameters\":{\"city\":\"${{ secrets.CITY }}\"}}"
+            -d "{\"workflow_id\":\"${{ secrets.COZE_WORKFLOW_ID }}\",\"parameters\":{\"keywords\":\"${{ secrets.KEYWORDS }}\"}}"
