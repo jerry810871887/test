@@ -10,8 +10,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Coze workflow
+        env:
+          COZE_WORKFLOW_RUN_URL: ${{ secrets.COZE_WORKFLOW_RUN_URL }}
+          COZE_API_TOKEN: ${{ secrets.COZE_API_TOKEN }}
+          COZE_WORKFLOW_ID: ${{ secrets.COZE_WORKFLOW_ID }}
+          KEYWORDS: ${{ secrets.KEYWORDS }}
         run: |
-          curl -sS -X POST "${{ secrets.COZE_WORKFLOW_RUN_URL }}" \
-            -H "Authorization: Bearer ${{ secrets.COZE_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"workflow_id\":\"${{ secrets.COZE_WORKFLOW_ID }}\",\"parameters\":\"{\\\"keywords\\\":\\\"${{ secrets.KEYWORDS }}\\\"}\"}"
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          url = os.environ["COZE_WORKFLOW_RUN_URL"]
+          token = os.environ["COZE_API_TOKEN"]
+          workflow_id = os.environ["COZE_WORKFLOW_ID"]
+          keywords = os.environ["KEYWORDS"]
+
+          body = {
+              "workflow_id": workflow_id,
+              "parameters": {
+                  "keywords": keywords
+              }
+          }
+
+          req = urllib.request.Request(
+              url,
+              data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Content-Type": "application/json",
+              },
+              method="POST",
+          )
+
+          with urllib.request.urlopen(req, timeout=120) as resp:
+              print(resp.read().decode("utf-8", errors="ignore"))
+          PY
